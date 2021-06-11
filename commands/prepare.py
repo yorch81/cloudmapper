@@ -101,7 +101,8 @@ def get_subnets(az):
 
 def get_ec2s(region):
     instances = query_aws(region.account, "ec2-describe-instances", region.region)
-    resource_filter = '.Reservations[]?.Instances[] | select(.State.Name == "running")'
+    # YoRcH: Filter instances not terminated
+    resource_filter = '.Reservations[]?.Instances[] | select(.State.Name != "terminated")'
     return pyjq.all(resource_filter, instances)
 
 
